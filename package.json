@@ -2,7 +2,7 @@
   "name": "screeps-cache",
   "version": "1.0.0",
   "description": "A generalized solution for heap and memory caching in Screeps",
-  "main": "index.js",
+  "main": "dist/main.js",
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",

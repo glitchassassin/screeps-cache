@@ -4,9 +4,11 @@ export * from './CacheMethods';
 export * from './GetterCache';
 
 declare global {
-    interface Memory {
-        cache: {[type: string]: {
-            [id: string]: any
-        }}
-    }
+  interface Memory {
+    cache: {
+      [type: string]: {
+        [id: string]: any;
+      };
+    };
+  }
 }

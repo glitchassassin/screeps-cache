@@ -1,4 +1,4 @@
-import { MemoryCache } from "CacheMethods";
+import { MemoryCache } from 'CacheMethods';
 
 /**
  * Caches the property value in Memory.
@@ -19,14 +19,14 @@ import { MemoryCache } from "CacheMethods";
  * (equivalent to the above).
  */
 export const memoryCache = (key: (instance: any) => string) => {
-    return (target: Object, propertyKey: string) => {
-        Object.defineProperty(target, propertyKey, {
-            get(): any {
-                return MemoryCache.get(key(this), propertyKey);
-            },
-            set(newValue: any) {
-                return MemoryCache.set(key(this), propertyKey, newValue);
-            }
-        });
-    }
-}
+  return (target: unknown, propertyKey: string): void => {
+    Object.defineProperty(target, propertyKey, {
+      get(): unknown {
+        return MemoryCache.get(key(this), propertyKey);
+      },
+      set(newValue: unknown) {
+        return MemoryCache.set(key(this), propertyKey, newValue);
+      }
+    });
+  };
+};

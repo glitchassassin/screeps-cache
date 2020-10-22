@@ -1,13 +1,14 @@
 {
   "name": "screeps-cache",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A generalized solution for heap and memory caching in Screeps",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
+  "files": ["dist/**/*"],
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",
-    "test": "jest"
+    "test": "jest"n
   },
   "keywords": [
     "screeps",

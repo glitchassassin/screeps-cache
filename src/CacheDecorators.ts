@@ -26,7 +26,8 @@ export const memoryCache = (key: (instance: any) => string) => {
       },
       set(newValue: unknown) {
         return MemoryCache.set(key(this), propertyKey, newValue);
-      }
+      },
+      enumerable: true
     });
   };
 };

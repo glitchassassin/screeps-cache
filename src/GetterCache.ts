@@ -26,7 +26,8 @@ const cacheGetter = (cacheMethod: CacheMethod, key: CacheKey, getter: (instance:
       },
       set() {
         // Set from game object only
-      }
+      },
+      enumerable: true
     });
   };
 };

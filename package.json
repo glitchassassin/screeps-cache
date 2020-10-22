@@ -1,6 +1,6 @@
 {
   "name": "screeps-cache",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A generalized solution for heap and memory caching in Screeps",
   "main": "dist/main.js",
   "scripts": {
@@ -16,7 +16,7 @@
   ],
   "author": "LordGreywether",
   "license": "MIT",
-  "dependencies": {
+  "devDependencies": {
     "@rollup/plugin-commonjs": "^15.1.0",
     "@rollup/plugin-multi-entry": "^4.0.0",
     "@rollup/plugin-node-resolve": "^9.0.0",

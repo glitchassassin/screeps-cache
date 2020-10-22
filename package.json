@@ -3,6 +3,7 @@
   "version": "1.0.1",
   "description": "A generalized solution for heap and memory caching in Screeps",
   "main": "dist/main.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",

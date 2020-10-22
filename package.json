@@ -8,7 +8,7 @@
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",
-    "test": "jest"n
+    "test": "jest"
   },
   "keywords": [
     "screeps",

@@ -76,4 +76,8 @@ Duplication may cause issues here. If you create two `CachedContainer` instances
 
 As a corollary to this, the heap cache will only work if the objects are created in heap scope: if you re-create the objects in each tick of your main loop, the Memory will still persist, but the heap cache will be useless.
 
+By default, the cached properties will only be updated when you get them. If you want to refresh all of the cached properties, you can do something like `for (let i in cachedContainer) {}` to hit them all.
+
+This uses `Memory.cache` to store cached data. If you're already using that key for something else, it may cause unpredictable problems: beware.
+
 The specific structure and the data you want to capture will vary depending on the rest of your implementation.

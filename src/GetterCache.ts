@@ -4,7 +4,12 @@ import { CacheKey } from 'CacheKeys';
 
 type Decorator = (target: unknown, propertyKey: string) => void;
 
-const cacheGetter = (cacheMethod: CacheMethod, key: CacheKey, getter: (instance: any) => unknown | undefined) => {
+const cacheGetter = (
+  cacheMethod: CacheMethod,
+  key: CacheKey,
+  getter: (instance: any) => unknown | undefined,
+  rehydrater: (data: any) => unknown = d => d
+) => {
   // Decorator scope requires us to maintain a cache
   // for each instance. WeakMap will drop any instances
   // once they have no other references to avoid memory
@@ -22,7 +27,7 @@ const cacheGetter = (cacheMethod: CacheMethod, key: CacheKey, getter: (instance:
         if (o !== undefined) {
           cacheMethod.set(key(this), propertyKey, o);
         }
-        return cacheMethod.get(key(this), propertyKey);
+        return rehydrater(cacheMethod.get(key(this), propertyKey));
       },
       set() {
         // Set from game object only
@@ -59,6 +64,10 @@ export const heapCacheGetter = (getter: (instance: any) => unknown): Decorator =
  *               If the getter returns undefined, the cached value will be
  *               used instead.
  */
-export const memoryCacheGetter = (key: CacheKey, getter: (instance: any) => unknown): Decorator => {
-  return cacheGetter(MemoryCache, key, getter);
+export const memoryCacheGetter = (
+  key: CacheKey,
+  getter: (instance: any) => unknown,
+  rehydrater?: (data: any) => unknown
+): Decorator => {
+  return cacheGetter(MemoryCache, key, getter, rehydrater);
 };

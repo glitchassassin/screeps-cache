@@ -3,6 +3,8 @@
 import { heapCacheGetter, keyById, memoryCache, memoryCacheGetter } from './main';
 import { mockGlobal, mockInstanceOf } from '../node_modules/screeps-jest/index';
 
+import { asRoomPosition } from 'Rehydraters';
+
 describe('CacheDecorators', () => {
   beforeEach(() => {
     mockGlobal<Memory>(
@@ -18,7 +20,8 @@ describe('CacheDecorators', () => {
           {
             id,
             hits: 50,
-            hitsMax: 100
+            hitsMax: 100,
+            pos: new RoomPosition(10, 10, 'sim')
           },
           true
         );
@@ -67,5 +70,24 @@ describe('CacheDecorators', () => {
     c2.hits = 20;
     expect(c.hits).toBe(10);
     expect(c2.hits).toBe(20);
+  });
+  it('should rehydrate RoomPositions', () => {
+    const rehydrater = jest.fn(asRoomPosition);
+    const rehydrater2 = jest.fn(asRoomPosition);
+    class CachedContainer {
+      public constructor(public id: Id<StructureContainer>) {}
+
+      @memoryCache(keyById, rehydrater)
+      public pos?: RoomPosition;
+
+      @memoryCacheGetter(keyById, (i: CachedContainer) => Game.getObjectById(i.id)?.pos, rehydrater2)
+      public objPos?: RoomPosition;
+    }
+    const c = new CachedContainer('id' as Id<StructureContainer>);
+    c.pos = new RoomPosition(25, 25, 'main');
+    expect(c.pos).toMatchObject({ x: 25, y: 25, roomName: 'main' });
+    expect(rehydrater).toHaveBeenCalled();
+    expect(c.objPos).toMatchObject({ x: 10, y: 10, roomName: 'sim' });
+    expect(rehydrater2).toHaveBeenCalled();
   });
 });

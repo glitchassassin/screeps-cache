@@ -1,3 +1,5 @@
+import { Rehydrater, defaultRehydrater } from 'Rehydraters';
+
 import { MemoryCache } from 'CacheMethods';
 
 /**
@@ -18,11 +20,11 @@ import { MemoryCache } from 'CacheMethods';
  * Some helper key functions are provided such as `keyById`
  * (equivalent to the above).
  */
-export const memoryCache = (key: (instance: any) => string) => {
+export const memoryCache = (key: (instance: any) => string, rehydrater: Rehydrater = defaultRehydrater) => {
   return (target: unknown, propertyKey: string): void => {
     Object.defineProperty(target, propertyKey, {
       get(): unknown {
-        return MemoryCache.get(key(this), propertyKey);
+        return rehydrater(MemoryCache.get(key(this), propertyKey));
       },
       set(newValue: unknown) {
         return MemoryCache.set(key(this), propertyKey, newValue);

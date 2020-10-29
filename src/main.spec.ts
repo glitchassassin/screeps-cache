@@ -90,4 +90,16 @@ describe('CacheDecorators', () => {
     expect(c.objPos).toMatchObject({ x: 10, y: 10, roomName: 'sim' });
     expect(rehydrater2).toHaveBeenCalled();
   });
+  it('should rehydrate undefined RoomPosition', () => {
+    const rehydrater = jest.fn(asRoomPosition);
+    class CachedContainer {
+      public constructor(public id: Id<StructureContainer>) {}
+
+      @memoryCache(keyById, rehydrater)
+      public pos?: RoomPosition;
+    }
+    const c = new CachedContainer('id' as Id<StructureContainer>);
+    expect(c.pos).toBeUndefined();
+    expect(rehydrater).toHaveBeenCalled();
+  });
 });

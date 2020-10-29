@@ -81,3 +81,7 @@ By default, the cached properties will only be updated when you get them. If you
 This uses `Memory.cache` to store cached data. If you're already using that key for something else, it may cause unpredictable problems: beware.
 
 The specific structure and the data you want to capture will vary depending on the rest of your implementation.
+
+## Practical Application
+
+I [wrote an article](https://www.jonwinsley.com/screeps/2020/10/29/screeps-world-state/) on how I'm integrating this into my own Screeps AI.

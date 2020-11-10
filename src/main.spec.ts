@@ -1,4 +1,4 @@
-/* eslint max-classes-per-file: ["error", 5] */
+/* eslint max-classes-per-file: ["error", 10] */
 
 import { heapCacheGetter, keyById, memoryCache, memoryCacheGetter } from './main';
 import { mockGlobal, mockInstanceOf } from '../node_modules/screeps-jest/index';
@@ -101,5 +101,21 @@ describe('CacheDecorators', () => {
     const c = new CachedContainer('id' as Id<StructureContainer>);
     expect(c.pos).toBeUndefined();
     expect(rehydrater).toHaveBeenCalled();
+  });
+  it('should invalidate caches', () => {
+    const invalidator = jest.fn(() => false);
+    class CachedContainer {
+      public constructor(public id: Id<StructureContainer>) {}
+
+      @memoryCacheGetter(keyById, (i: CachedContainer) => Game.getObjectById(i.id)?.hitsMax, undefined, invalidator)
+      public hitsMax?: number;
+    }
+    const c = new CachedContainer('id' as Id<StructureContainer>);
+    expect(c.hitsMax).toBe(100);
+    // Initially value is undefined, so invalidator will not be checked
+    expect(invalidator).not.toHaveBeenCalled();
+    expect(c.hitsMax).toBe(100);
+    // Invalidator will be checked on second get
+    expect(invalidator).toHaveBeenCalled();
   });
 });

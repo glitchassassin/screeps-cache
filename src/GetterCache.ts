@@ -8,7 +8,8 @@ const cacheGetter = (
   cacheMethod: CacheMethod,
   key: CacheKey,
   getter: (instance: any) => unknown | undefined,
-  rehydrater: (data: any) => unknown = d => d
+  rehydrater: (data: any) => unknown = d => d,
+  invalidateCache: (data: any) => boolean = () => true
 ) => {
   // Decorator scope requires us to maintain a cache
   // for each instance. WeakMap will drop any instances
@@ -23,11 +24,12 @@ const cacheGetter = (
     // the source class, so the cache indexes by instance
     Object.defineProperty(target, propertyKey, {
       get(): unknown {
-        const o = getter(this);
-        if (o !== undefined) {
-          cacheMethod.set(key(this), propertyKey, o);
+        let value = cacheMethod.get(key(this), propertyKey);
+        if (value === undefined || invalidateCache(value)) {
+          value = getter(this);
         }
-        return rehydrater(cacheMethod.get(key(this), propertyKey));
+        cacheMethod.set(key(this), propertyKey, value);
+        return rehydrater(value);
       },
       set() {
         // Set from game object only
@@ -52,8 +54,11 @@ const keyByInstance = (i: unknown): unknown => i;
  *               If the getter returns undefined, the cached value will be
  *               used instead.
  */
-export const heapCacheGetter = (getter: (instance: any) => unknown): Decorator => {
-  return cacheGetter(HeapCache, keyByInstance, getter);
+export const heapCacheGetter = (
+  getter: (instance: any) => unknown,
+  invalidateCache?: (data: any) => boolean
+): Decorator => {
+  return cacheGetter(HeapCache, keyByInstance, getter, undefined, invalidateCache);
 };
 
 /**
@@ -67,7 +72,8 @@ export const heapCacheGetter = (getter: (instance: any) => unknown): Decorator =
 export const memoryCacheGetter = (
   key: CacheKey,
   getter: (instance: any) => unknown,
-  rehydrater?: (data: any) => unknown
+  rehydrater?: (data: any) => unknown,
+  invalidateCache?: (data: any) => boolean
 ): Decorator => {
-  return cacheGetter(MemoryCache, key, getter, rehydrater);
+  return cacheGetter(MemoryCache, key, getter, rehydrater, invalidateCache);
 };

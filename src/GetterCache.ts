@@ -9,7 +9,7 @@ const cacheGetter = (
   key: CacheKey,
   getter: (instance: any) => unknown | undefined,
   rehydrater: (data: any) => unknown = d => d,
-  invalidateCache: (data: any) => boolean = () => true
+  invalidateCache: (data: any) => boolean = () => false
 ) => {
   // Decorator scope requires us to maintain a cache
   // for each instance. WeakMap will drop any instances

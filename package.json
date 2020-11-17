@@ -1,6 +1,6 @@
 {
   "name": "screeps-cache",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "A generalized solution for heap and memory caching in Screeps",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -8,7 +8,8 @@
   "scripts": {
     "lint": "eslint \"src/**/*.ts\"",
     "build": "rollup -c",
-    "test": "jest"
+    "test": "jest",
+    "predeploy": "npm run lint && npm run test"
   },
   "keywords": [
     "screeps",

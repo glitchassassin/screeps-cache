@@ -5,8 +5,11 @@ import { mockGlobal, mockInstanceOf } from '../node_modules/screeps-jest/index';
 
 import { asRoomPosition } from 'Rehydraters';
 
+let VISIBLE = true;
+
 describe('CacheDecorators', () => {
   beforeEach(() => {
+    VISIBLE = true;
     mockGlobal<Memory>(
       'Memory',
       {
@@ -16,6 +19,7 @@ describe('CacheDecorators', () => {
     );
     mockGlobal<Game>('Game', {
       getObjectById: (id: Id<any>) => {
+        if (!VISIBLE) return null;
         return mockInstanceOf<Structure>(
           {
             id,
@@ -42,6 +46,8 @@ describe('CacheDecorators', () => {
     c.hits = 10;
     expect(c.hits).toBe(10);
     expect(c.hitsMax).toBe(100);
+    VISIBLE = false;
+    expect(c.hitsMax).toBe(100);
   });
   it('should cache getters in Heap', () => {
     class CachedContainer {
@@ -55,6 +61,8 @@ describe('CacheDecorators', () => {
     }
     const c = new CachedContainer('id' as Id<StructureContainer>);
     expect(c.hits).toBe(50);
+    expect(c.hitsMax).toBe(100);
+    VISIBLE = false;
     expect(c.hitsMax).toBe(100);
   });
   it('should not clash with other memoryCache instances', () => {
@@ -89,6 +97,8 @@ describe('CacheDecorators', () => {
     expect(rehydrater).toHaveBeenCalled();
     expect(c.objPos).toMatchObject({ x: 10, y: 10, roomName: 'sim' });
     expect(rehydrater2).toHaveBeenCalled();
+    VISIBLE = false;
+    expect(c.objPos).toMatchObject({ x: 10, y: 10, roomName: 'sim' });
   });
   it('should rehydrate undefined RoomPosition', () => {
     const rehydrater = jest.fn(asRoomPosition);

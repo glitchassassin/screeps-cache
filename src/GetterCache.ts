@@ -24,9 +24,9 @@ const cacheGetter = (
     // the source class, so the cache indexes by instance
     Object.defineProperty(target, propertyKey, {
       get(): unknown {
-        let value = cacheMethod.get(key(this), propertyKey);
-        if (value === undefined || invalidateCache(value)) {
-          value = getter(this);
+        let value = getter(this);
+        if (value === undefined && !invalidateCache(value)) {
+          value = cacheMethod.get(key(this), propertyKey);
         }
         cacheMethod.set(key(this), propertyKey, value);
         return rehydrater(value);

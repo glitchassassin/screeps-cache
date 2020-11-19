@@ -124,6 +124,7 @@ describe('CacheDecorators', () => {
     expect(c.hitsMax).toBe(100);
     // Initially value is undefined, so invalidator will not be checked
     expect(invalidator).not.toHaveBeenCalled();
+    VISIBLE = false;
     expect(c.hitsMax).toBe(100);
     // Invalidator will be checked on second get
     expect(invalidator).toHaveBeenCalled();

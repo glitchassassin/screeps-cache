@@ -13,7 +13,3 @@ declare global {
     };
   }
 }
-
-if (process?.env?.NODE_ENV !== 'test') {
-  Memory.cache ??= {};
-}

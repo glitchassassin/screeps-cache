@@ -1,6 +1,6 @@
 {
   "name": "screeps-cache",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "A generalized solution for heap and memory caching in Screeps",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",

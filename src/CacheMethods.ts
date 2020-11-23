@@ -4,7 +4,7 @@ export interface CacheMethod {
 }
 
 export const MemoryCache = {
-  get: (key: string, propertyKey: string): unknown => (Memory.cache[key] ?? {})[propertyKey],
+  get: (key: string, propertyKey: string): unknown => Memory.cache?.[key]?.[propertyKey],
   set: (key: string, propertyKey: string, newValue: unknown): void => {
     Memory.cache ??= {};
     Memory.cache[key] ??= {};
